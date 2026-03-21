@@ -15,6 +15,7 @@ export class Zones {
         this.client = client;
     }
 
+    /** Refreshes the cached zone state */
     async refresh(): Promise<ZoneState[]> {
         const response = await get_zone_settings(this.client.api);
         const zoneNames = response.zone_name.split(";");
@@ -26,27 +27,50 @@ export class Zones {
         }));
     }
 
+    /**
+     * Gets the state of all cached zones.
+     */
     getCachedZones(): ZoneState[] {
         return [...this.zones];
     }
 
+    /**
+     * Gets all zones' state
+     */
     async getZones(): Promise<ZoneState[]> {
         return await this.refresh();
     }
 
+    /**
+     * Gets the cached state of a zone
+     * @param name
+     */
     getCachedZone(name : string) : boolean | undefined {
         return this.zones.find((zone) => zone.name === name)?.state;
     }
 
+    /**
+     * Gets the state of a Zone
+     * @param name
+     */
     async getZone(name: string): Promise<boolean | undefined> {
         const zones = await this.refresh();
         return zones.find((zone) => zone.name === name)?.state;
     }
 
+    /**
+     * Sets a Zone's state
+     * @param name
+     * @param state
+     */
     async setZone(name: string, state: boolean): Promise<void> {
         await this.setZones([{ name, state }]);
     }
 
+    /**
+     * Sets multiple zones' state
+     * @param changes
+     */
     async setZones(changes: ZoneState[]): Promise<void> {
         await this.refresh();
 
