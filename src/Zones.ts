@@ -2,6 +2,9 @@ import type { DaikinClient } from "./DaikinClient";
 import { get_zone_settings } from "./api";
 import { set_zone_setting } from "./api/aircon/set_zone_setting";
 
+// TODO: Add zone temprature support
+//       see: https://github.com/fredrike/pydaikin/blob/master/pydaikin/daikin_airbase.py#L205
+
 export type ZoneState = {
     name: string;
     state: boolean;
