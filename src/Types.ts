@@ -18,7 +18,7 @@ export enum ControlMode {
     Hot,
     Cool,
     Auto,
-    Dry
+    Dry = 7
 }
 
 export enum FanSpeed {
