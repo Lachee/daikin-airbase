@@ -17,7 +17,7 @@ export class API {
         this.host = host;
     }
 
-    async request(endpoint: string, parameters? : Record<string, string>) : Promise<Params> {
+    async request(endpoint: string, parameters? : Record<string, string|number|undefined|null>) : Promise<Params> {
         const body = await new Promise<string>((resolve, reject) => {
             const url = new URL(`/skyfi${endpoint}`, `http://${this.host}/`)
             const queries = [];
@@ -25,8 +25,10 @@ export class API {
                 for (const key in parameters) {
                     // It specifically needs space to be encoded as %20, so we will manually force the URI encoding.
                     // instead of the more modern browser + for spaces.
-                    const value = encodeURIComponent(parameters[key] || '');
-                    queries.push(`${key}=${value}`);
+                    const value = parameters[key];
+                    if (value === undefined) continue;
+                    const encoded = encodeURIComponent(`${value || ''}`);
+                    queries.push(`${key}=${encoded}`);
                 }
             }
 

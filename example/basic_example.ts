@@ -1,26 +1,19 @@
 import {DaikinClient} from "../src";
 
-const USE_DISCOVERY = false;
-const FALLBACK_HOST = "10.0.30.182";
-
-async function createClient() {
-    if (USE_DISCOVERY) {
-        const devices = await DaikinClient.discover();
-        if (devices.length > 0 && devices[0]) {
-            const device = devices[0];
-            return new DaikinClient({device});
-        }
-    }
-
-    return new DaikinClient({
-        host: FALLBACK_HOST
-    });
-}
+const EXAMPLE_HOST = "10.0.30.182";
 
 (async () => {
-    const client = await createClient();
+    // Filter the device you would normally want. Ducted houses are likely to only have one.
+    const client = new DaikinClient({ host: EXAMPLE_HOST });
+    const info = await client.getBasicInfo();
+    console.log('Basic Info for', info.name);
+    console.log(info);
 
-    await client.zones.setZone('Bathroom', true);
-    const state = client.zones.getCachedZone('Bathroom');
-    console.log(state);
+    // Check the state of the system
+    const target = await client.getTargetTemperature()
+    console.log("Target temperature is ", `${target}℃`);
+
+    // Check the state of a zone
+    const zone = await client.zones.getZone("Master Bedroom");
+    console.log("Master Bedroom is:", zone ? 'on' : 'off');
 })();

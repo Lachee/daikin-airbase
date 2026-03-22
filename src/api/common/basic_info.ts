@@ -32,35 +32,3 @@ export type BasicInfoResponse = DaikinResponse & {
 
 export const basic_info = (http : API) =>
     http.request('/common/basic_info') as Promise<BasicInfoResponse>;
-
-export type BasicInfo = {
-    type: 'aircon',
-    region: string,
-    version: string,
-    name: string,
-    method: 'polling',
-    port: number,
-    id: string,
-    password: string,
-    ssid: string,
-    led: boolean,
-    adp_mode: 'run',
-    adp_kind: number,
-}
-export async function getBasicInfo(http : API) : Promise<BasicInfo> {
-    const response = await basic_info(http);
-    return {
-        type: response.type,
-        region: response.reg,
-        version: response.ver,
-        name: response.name,
-        method: response.method,
-        port: response.port,
-        id: response.id,
-        password: response.pw,
-        ssid: response.ssid,
-        led: response.led === 1,
-        adp_mode: response.adp_mode,
-        adp_kind: response.adp_kind,
-    }
-}
