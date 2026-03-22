@@ -6,6 +6,9 @@ This library is used to communicate with Daikin Airbase devices.
 - Wireless LAN connecting Adaptor for Ducted Split Systems
   - 🇦🇺 `BRP15B61`
 
+> [!TIP]
+> Does this library support your system? Please add your model number and country flag here!
+
 ## Supported Features
 The following features have been tested
 - Get/Set Temperature
