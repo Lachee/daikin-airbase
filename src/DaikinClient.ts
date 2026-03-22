@@ -112,15 +112,16 @@ export class DaikinClient {
     async setControlInfo(info: Partial<ControlInfo>) {
         const latest = await this.getControlInfo();
         const update = {...latest, ...info};
+        const int = (v: number) => Math.round(v);
         const bool = (v: boolean) => v ? 1 : 0;
         const response = await set_control_info(this.api, {
             f_airside: bool(update.fanAirside),
             f_auto: bool(update.fanAuto),
             f_dir: bool(update.swinging),
-            f_rate: update.fanSpeed,
-            mode: update.mode,
+            f_rate: int(update.fanSpeed),
+            mode: int(update.mode),
             pow: bool(update.power),
-            stemp: update.targetTemperature
+            stemp: int(update.targetTemperature)
         });
 
         if (response.ret !== 'OK')
