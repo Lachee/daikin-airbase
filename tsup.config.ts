@@ -9,7 +9,7 @@ export default defineConfig({
     outDir: 'dist',
     outExtension({ format }) {
         return {
-            js: format === 'cjs' ? '.cjs' : '.js'
+            js: format === 'cjs' ? '.cjs' : '.mjs'
         };
     }
 });
