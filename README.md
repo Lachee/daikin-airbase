@@ -35,6 +35,15 @@ const client = new DaikinClient({ host: EXAMPLE_HOST });
 await client.setTargetTemprature(24);
 ```
 
+## Security and Warranty
+This library is not affiliated with Daikin. I take no responsibility for any damages caused by this library. Use at your own risk.
+
+Issues within the endpoints provided by Daikin are not covered by this library. Any security concerns should be disclosed to Daikin.
+
+> [!WARNING]
+> Daikin exposes your wifi password in plain text with the get_wifi_setting. 
+> Make sure you don't connect your system to the internet!
+
 ## Development
 All contributions are welcome! Please make sure everything is tested on your own device before submitting a pull request.
 
