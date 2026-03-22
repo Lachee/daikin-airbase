@@ -27,7 +27,7 @@ export class API {
                     // instead of the more modern browser + for spaces.
                     const value = parameters[key];
                     if (value === undefined) continue;
-                    const encoded = encodeURIComponent(`${value || ''}`);
+                    const encoded = encodeURIComponent(`${value ?? ''}`);
                     queries.push(`${key}=${encoded}`);
                 }
             }

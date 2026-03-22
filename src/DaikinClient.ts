@@ -4,7 +4,7 @@ import type {DiscoveredDevice} from './api'
 import {Zones} from "./Zones";
 import {type BasicInfo, type ControlInfo, ControlMode, FanSpeed, RemoteType, Status} from "./Types";
 import {get_control_info} from "./api/aircon/get_control_info";
-import {set_control_info} from "./api/aircon/set_control_info";
+import {type ControlInfoRequestParam, set_control_info} from "./api/aircon/set_control_info";
 
 type DeviceOption = {
     device: DiscoveredDevice;
@@ -19,7 +19,8 @@ export type DaikinClientOptions = (DeviceOption | HostOption) & {
 
 export type Fan = {
     speed: FanSpeed,
-    auto: boolean
+    auto: boolean,
+    airside?: boolean,
 };
 
 export class DaikinClient {
@@ -85,12 +86,13 @@ export class DaikinClient {
         const info = await this.getControlInfo();
         return {
             speed: info.fanSpeed,
-            auto: info.fanAuto
+            auto: info.fanAuto,
+            airside: info.fanAirside
         }
     }
 
     async setFan(fan: Fan): Promise<void> {
-        return await this.setControlInfo({fanSpeed: fan.speed, fanAuto: fan.auto});
+        return await this.setControlInfo({fanSpeed: fan.speed, fanAuto: fan.auto, fanAirside: fan.airside ?? false});
     }
 
     async getTargetTemperature(): Promise<number> {
@@ -114,15 +116,24 @@ export class DaikinClient {
         const update = {...latest, ...info};
         const int = (v: number) => Math.round(v);
         const bool = (v: boolean) => v ? 1 : 0;
-        const response = await set_control_info(this.api, {
-            f_airside: bool(update.fanAirside),
+
+        const params : ControlInfoRequestParam = {
+            f_airside: 0,
             f_auto: bool(update.fanAuto),
             f_dir: bool(update.swinging),
             f_rate: int(update.fanSpeed),
             mode: int(update.mode),
             pow: bool(update.power),
             stemp: int(update.targetTemperature)
-        });
+        };
+
+        if (update.fanAirside) {
+            params.f_airside = 1;
+            params.f_auto = 0;
+            params.f_dir = 0;
+        }
+
+        const response = await set_control_info(this.api, params);
 
         if (response.ret !== 'OK')
             throw new Error(`Failed to update control info: ${response.ret}`);
