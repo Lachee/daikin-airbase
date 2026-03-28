@@ -45,11 +45,16 @@ export type ControlInfo = {
   fanAuto: boolean,               // f_auto
   fanAirside: boolean,            // f_airside
   targetTemperature: number,      // stemp
-  sensorTemperatures: number[],   //dt1, dt2, ...
+  controlTemperature: number[],   //dt1, dt2, ...
   power: boolean,                 // pow
   status: Status,                 // operate
   swinging: boolean,              // f_dir
   isFilterDirty: boolean,         // filter_sign_info
   isCentrallyControlled: boolean, // cent
   remoteControlType: RemoteType,  // remo
+}
+
+export type SensorInfo = {
+  insideTemperature: number,
+  outsideTemperature: number | undefined,
 }

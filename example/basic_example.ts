@@ -13,8 +13,15 @@ const EXAMPLE_HOST = "10.0.30.182";
     const target = await client.getTargetTemperature()
     console.log("Target temperature is ", `${target}℃`);
 
+    const current = await client.getInsideTemperature();
+    console.log("Current temperature is ", `${current}℃`);
+
     // Check the state of a zone
     const zone = await client.zones.getZoneAt(0);
     console.log(`The '${zone.name}' is ${zone.isOn ? "on" : "off"}`);
     if (zone.temperature) console.log(`- It is set to ${zone.temperature}℃`)
+
+    await client.zones.updateZone(zone.name, { isOn: true })
+    console.log("- done, reading back the new state:");
+    console.log(await client.zones.getZoneAt(0));
 })();
